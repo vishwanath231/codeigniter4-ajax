@@ -82,7 +82,7 @@
             const data = {
                 username: username.value,
                 email: email.value,
-                phone: phone.value
+                phone: Number(phone.value)
             }
 
             fetch('http://localhost:8080/new', {
@@ -135,7 +135,9 @@
                             <td class="px-4 py-4 font-medium text-gray-900 uppercase">${val.name}</td>
                             <td class="px-4 py-4">${val.email}</td>
                             <td>
-                                <a href='/user/${val.id}' class='bg-green-500 rounded p-2.5 text-white'>view</a>
+                                <a href='/user/${val.id}' class='bg-green-500 rounded p-2.5 text-white'>View</a>
+                                <a href='/update/${val.id}' class='bg-blue-500 rounded p-2.5 text-white'>Update</a>
+                                <button onclick='deleteUser(${val.id})' class='bg-red-500 rounded p-2.5 text-white'>Delete</button>
                             </td>
                         </tr>
                     `;
@@ -148,6 +150,18 @@
         }
 
         getAllUsers()
+
+
+
+        const deleteUser = (val) => {
+            fetch(`http://localhost:8080/delete/${val}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    getAllUsers();
+                    console.log(data);
+                })
+                .catch((err) => console.log(err))
+        }
     </script>
 
 

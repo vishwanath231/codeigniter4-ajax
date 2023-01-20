@@ -33,6 +33,9 @@ $routes->get('/', 'Home::index');
 $routes->get('/users', 'Home::getUsers');
 $routes->get('/user/(:any)', 'Home::getUser/$1');
 $routes->match(['post', 'get'],'/new', 'Home::postUser');
+$routes->match(['post', 'get'],'/delete/(:any)', 'DeleteController::deleteUser/$1');
+$routes->match(['post', 'get'],'/update/(:any)', 'UpdateController::selectUser/$1');
+$routes->match(['post', 'get'],'/update', 'UpdateController::updateUser');
 
 /*
  * --------------------------------------------------------------------

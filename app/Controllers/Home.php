@@ -63,6 +63,16 @@ class Home extends BaseController{
             $jsonData = json_encode($err);
             return $this->response->setBody($jsonData)->setContentType('application/json');
        
+        }else if (!preg_match('/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $postData['email'])) {
+
+            $err = array(
+                'err' => 'Email invalid!',
+                'code' => 400
+            );
+
+            $jsonData = json_encode($err);
+            return $this->response->setBody($jsonData)->setContentType('application/json');
+            
         }else if ($postData['phone'] === '') {
             
             $err = array(
@@ -73,7 +83,7 @@ class Home extends BaseController{
             $jsonData = json_encode($err);
             return $this->response->setBody($jsonData)->setContentType('application/json');
         
-        }elseif (!preg_match('/^[0-9]{10}+$/', $postData['phone'])) {
+        }elseif (!preg_match('/^[6-9]{1}[0-9]{9}$/', $postData['phone'])) {
 
             $err = array(
                 'err' => 'Phone number invalid!',
