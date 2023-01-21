@@ -25,7 +25,7 @@ class AllUserModel extends Model{
                     ->table('users')
                     ->where(['id' => $id])
                     ->get()
-                    ->getResult();
+                    ->getRow();
     }
 
 
