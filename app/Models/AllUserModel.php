@@ -5,38 +5,41 @@ use CodeIgniter\Model;
 
 class AllUserModel extends Model{
 
+    protected $db;
+
+    public function __construct(){
+        $this->db = \Config\Database::connect();
+    }
 
     public function getAllUsers(){
-        $db = \Config\Database::connect();
 
-        $query = $db->query("SELECT id, name, email FROM users");
-        $result = $query->getResult();
-        return $result;
+        return $this->db
+                    ->table('users')
+                    ->get()
+                    ->getResult();
     }
 
     public function getUserById($id){
-        $db = \Config\Database::connect();
 
-        $query = $db->query("SELECT * FROM users WHERE id = '$id'");
-        $result = $query->getResult();
-        return $result;
+        return $this->db
+                    ->table('users')
+                    ->where(['id' => $id])
+                    ->get()
+                    ->getResult();
     }
 
 
     public function postUserModel($data){
-        $db = \Config\Database::connect();
-
-        $query = $db->table("users");
-        $result = $query->insert($data);
-        return $result;
+        return $this->db->table("users")->insert($data);
     }
 
     public function emailValid($email){
-        $db = \Config\Database::connect();
+        $result = $this->db
+                    ->table('users')
+                    ->where(['email' => $email])
+                    ->countAllResults();
 
-        $query = $db->table('users');
-        $result = $query->where('email', $email);
-        if ($result->countAllResults() > 0) {
+        if ($result > 0) {
             return true;
         }else {
             return false;
@@ -45,18 +48,17 @@ class AllUserModel extends Model{
 
 
     public function phoneValid($phone){
-        $db = \Config\Database::connect();
-
-        $query = $db->table('users');
-        $result = $query->where('phone', $phone);
-        if ($result->countAllResults() > 0) {
+        $result = $this->db
+                        ->table('users')
+                        ->where(['phone' => $phone])
+                        ->countAllResults();
+        
+        if ($result > 0) {
             return true;
         } else {
             return false;
         }
     }
-
-
     
 }
 

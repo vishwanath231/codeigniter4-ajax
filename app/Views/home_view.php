@@ -51,13 +51,14 @@
         </div>
     </div>
 
-
     <script src="/assets/js/tailwindcss.js"></script>
 
 
 
 
     <script>
+        
+
         const tbody = document.getElementById('tbody');
         const errMsg = document.getElementById('errMsg');
         const details = document.getElementById('details');
@@ -119,9 +120,11 @@
          */
 
         function getAllUsers() {
+            tbody.innerHTML =  'loading...';
             fetch('http://localhost:8080/users')
                 .then((res) => res.json())
                 .then((data) => {
+
                     if (data?.users) {
 
                         const users = data.users;

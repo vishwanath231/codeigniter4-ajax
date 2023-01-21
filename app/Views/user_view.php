@@ -25,11 +25,11 @@
                 </div>
                 <div class="flex items-center mb-3">
                     <div class="font-bold text-gray-500">Email: </div>
-                    <div class="text-lg capitalize ml-2 "><?= $val->email; ?></div>
+                    <div class="text-lg ml-2 "><?= $val->email; ?></div>
                 </div>
                 <div class="flex items-center mb-3">
                     <div class="font-bold text-gray-500">Phone: </div>
-                    <div class="text-lg capitalize ml-2 "><?= $val->phone; ?></div>
+                    <div class="text-lg ml-2 "><?= $val->phone; ?></div>
                 </div>
                 <div class="text-center mt-10 block">
                     <a href="/" class="bg-green-500 text-black p-2.5 rounded">Home</a>

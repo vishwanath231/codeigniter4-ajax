@@ -7,18 +7,19 @@ use CodeIgniter\Model;
 class UpdateModel extends Model{
 
 
-    public function getUserById($id){
-        $db = \Config\Database::connect();
+    protected $db;
 
-        $query = $db->query("SELECT * FROM users WHERE id = '$id'");
-        $result = $query->getResult();
-        return $result;
+    public function __construct(){
+        $this->db = \Config\Database::connect();
     }
 
+
+    public function getUserById($id){
+        return $this->db->table('users')->where(['id' => $id])->get()->getResult();
+    }
+
+
     public function updateCurrentUser($id, $data){
-        $db = \Config\Database::connect();
-        $query = $db->table('users');
-        $up = $query->where('id', $id);
-        return $up->update($data);
+        return $this->db->table('users')->where(['id' => $id])->update($data);
     }
 }

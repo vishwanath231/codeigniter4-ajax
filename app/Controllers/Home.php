@@ -15,10 +15,10 @@ class Home extends BaseController{
     public function getUsers(){
 
         $allUserModel = new AllUserModel();
-        $get['users'] = $allUserModel->getAllUsers();
-        $jsonData = json_encode($get);
+        $data['users'] = $allUserModel->getAllUsers();
+        $jsonData = json_encode($data);
         return $this->response->setBody($jsonData)->setContentType('application/json');
-        // return $this->response->setJSON($get);
+        // return $this->response->setJSON($jsonData);
     }
 
 
@@ -35,93 +35,100 @@ class Home extends BaseController{
 
         $data = $request->getJSON();
 
-        $postData = array(
-            'name' =>$data->username, 
-            'email' =>$data->email, 
-            'phone' =>$data->phone, 
-        );
+        if ($data) {
 
-        $allUserModel = new AllUserModel();
-        $email_check = $allUserModel->emailValid($data->email);
-        $phone_check = $allUserModel->phoneValid($data->phone);
-        
-        if ($postData['name'] === '') {
-            $err = array(
-                'err' => 'Name is required!',
-                'code' => 400
+            $postData = array(
+                'name' => $data->username,
+                'email' => $data->email,
+                'phone' => $data->phone,
             );
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-        
-        }else if ($postData['email'] === '') {
-            $err = array(
-                'err' => 'Email is required!',
-                'code' => 400
-            );
+            $allUserModel = new AllUserModel();
+            $email_check = $allUserModel->emailValid($data->email);
+            $phone_check = $allUserModel->phoneValid($data->phone);
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-       
-        }else if (!preg_match('/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $postData['email'])) {
+            if ($postData['name'] === '') {
+                $err = array(
+                    'err' => 'Name is required!',
+                    'code' => 400
+                );
 
-            $err = array(
-                'err' => 'Email invalid!',
-                'code' => 400
-            );
-
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
             
-        }else if ($postData['phone'] === '') {
+            } else if ($postData['email'] === '') {
+                $err = array(
+                    'err' => 'Email is required!',
+                    'code' => 400
+                );
+
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
             
-            $err = array(
-                'err' => 'Phone number is required!',
-                'code' => 400
-            );
+            } else if (!preg_match('/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $postData['email'])) {
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-        
-        }elseif (!preg_match('/^[6-9]{1}[0-9]{9}$/', $postData['phone'])) {
+                $err = array(
+                    'err' => 'Email invalid!',
+                    'code' => 400
+                );
 
-            $err = array(
-                'err' => 'Phone number invalid!',
-                'code' => 400
-            );
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            } else if ($postData['phone'] === '') {
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-        
-        }else if ($email_check === true) {
+                $err = array(
+                    'err' => 'Phone number is required!',
+                    'code' => 400
+                );
 
-            $err = array(
-                'err' => 'Email already exists!', 
-                'code' => 400
-            );
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            } elseif (!preg_match('/^[6-9]{1}[0-9]{9}$/', $postData['phone'])) {
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-        
-        }else if ($phone_check === true) {
+                $err = array(
+                    'err' => 'Phone number invalid!',
+                    'code' => 400
+                );
 
-            $err = array(
-                'err' => 'Phone number already exists!',
-                'code' => 400
-            );
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            } else if ($email_check === true) {
 
-            $jsonData = json_encode($err);
-            return $this->response->setBody($jsonData)->setContentType('application/json');
-            
+                $err = array(
+                    'err' => 'Email already exists!',
+                    'code' => 400
+                );
+
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            } else if ($phone_check === true) {
+
+                $err = array(
+                    'err' => 'Phone number already exists!',
+                    'code' => 400
+                );
+
+                $jsonData = json_encode($err);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            } else {
+
+                $success = array(
+                    'msg' => 'inserted',
+                    'code' => 201
+                );
+
+                $allUserModel->postUserModel($postData);
+                $jsonData = json_encode($success);
+                return $this->response->setBody($jsonData)->setContentType('application/json');
+            }
         }else {
 
-            $success = array(
-                'msg' => 'inserted',
-                'code' => 201
+            $err = array(
+                'err' => 'access denied!',
+                'code' => 400
             );
 
-            $allUserModel->postUserModel($postData);
-            $jsonData = json_encode($success);
+            $jsonData = json_encode($err);
             return $this->response->setBody($jsonData)->setContentType('application/json');
         }
     }

@@ -5,10 +5,14 @@ use CodeIgniter\Model;
 
 class DeleteModel extends Model{
 
+    protected $db;
+
+    public function __construct(){
+        $this->db = \Config\Database::connect();
+    }
 
     public function getUserById($id){
-        $db = \Config\Database::connect();
 
-        return $db->table('users')->delete(['id' => $id]);
+        return $this->db->table('users')->delete(['id' => $id]);
     }    
 }
